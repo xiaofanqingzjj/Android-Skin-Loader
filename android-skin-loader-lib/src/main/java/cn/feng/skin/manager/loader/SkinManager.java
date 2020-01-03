@@ -135,7 +135,7 @@ public class SkinManager implements ISkinLoader{
 	 * @param skinPackagePath path of skin apk
 	 * @param callback callback to notify user
 	 */
-	public void load(String skinPackagePath, final ILoaderListener callback) {
+	public void load(final String skinPackagePath, final ILoaderListener callback) {
 		
 		new AsyncTask<String, Void, Resources>() {
 
@@ -176,6 +176,7 @@ public class SkinManager implements ISkinLoader{
 					return null;
 				} catch (Exception e) {
 					e.printStackTrace();
+					L.w("loadSkin:" + skinPackagePath + " error " + e.getMessage());
 					return null;
 				}
 			};
