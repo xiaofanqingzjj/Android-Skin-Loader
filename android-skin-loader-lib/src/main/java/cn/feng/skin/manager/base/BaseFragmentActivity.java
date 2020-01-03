@@ -34,7 +34,13 @@ public class BaseFragmentActivity extends FragmentActivity implements ISkinUpdat
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
+
+
+		getResources();
+
+
+//		getLayoutInflater()
+
         try {
             Field field = LayoutInflater.class.getDeclaredField("mFactorySet");
             field.setAccessible(true);

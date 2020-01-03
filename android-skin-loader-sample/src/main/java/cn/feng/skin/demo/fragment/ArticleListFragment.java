@@ -108,6 +108,7 @@ public class ArticleListFragment extends BaseFragment{
 		textView.setLayoutParams(param);
 		textView.setTextColor(getActivity().getResources().getColor(R.color.color_title_bar_text));
 		textView.setTextSize(20);
+
 		titleBarLayout.addView(textView);
 		
 		List<DynamicAttr> mDynamicAttr = new ArrayList<DynamicAttr>();
