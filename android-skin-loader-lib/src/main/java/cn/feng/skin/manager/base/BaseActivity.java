@@ -1,8 +1,11 @@
 package cn.feng.skin.manager.base;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
+
+import com.tencent.fskin.SkinResourcesWrapper;
 
 import java.util.List;
 
@@ -79,5 +82,13 @@ public class BaseActivity extends Activity implements ISkinUpdate, IDynamicNewVi
 	@Override
 	public void dynamicAddView(View view, List<DynamicAttr> pDAttrs) {
 		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+	}
+
+	@Override
+	public Resources getResources() {
+		Resources org = super.getResources();
+		SkinResourcesWrapper skinResourcesWrapper = new SkinResourcesWrapper(org);
+		return skinResourcesWrapper;
+
 	}
 }

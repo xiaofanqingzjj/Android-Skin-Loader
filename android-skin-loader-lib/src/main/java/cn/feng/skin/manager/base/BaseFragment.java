@@ -39,4 +39,6 @@ public class BaseFragment extends Fragment implements IDynamicNewView{
 		LayoutInflater result = getActivity().getLayoutInflater();
 		return result;
 	}
+
+
 }
