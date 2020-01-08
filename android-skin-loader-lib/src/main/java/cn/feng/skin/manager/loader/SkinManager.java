@@ -15,6 +15,8 @@ import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import cn.feng.skin.manager.config.SkinConfig;
 import cn.feng.skin.manager.listener.ILoaderListener;
 import cn.feng.skin.manager.listener.ISkinLoader;
@@ -55,6 +57,8 @@ import cn.feng.skin.manager.util.L;
  * @author fengjun
  */
 public class SkinManager implements ISkinLoader{
+
+	static final String TAG = "SkinManager";
 	
 	private static final String NOT_INIT_ERROR = "SkinManager MUST init with Context first";
 	private static Object synchronizedLock = new Object();
@@ -160,6 +164,8 @@ public class SkinManager implements ISkinLoader{
 						PackageInfo mInfo = mPm.getPackageArchiveInfo(skinPkgPath, PackageManager.GET_ACTIVITIES);
 						skinPackageName = mInfo.packageName;
 
+						Log.e(TAG, "loadSkin skinPackageName:" + skinPackageName);
+
 						AssetManager assetManager = AssetManager.class.newInstance();
 						Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
 						addAssetPath.invoke(assetManager, skinPkgPath);
@@ -229,6 +235,8 @@ public class SkinManager implements ISkinLoader{
 		}
 		
 		String resName = context.getResources().getResourceEntryName(resId);
+
+		Log.d(TAG, "getColor name:" + resName + ", type:color, package:" + skinPackageName);
 		
 		int trueResId = mResources.getIdentifier(resName, "color", skinPackageName);
 		int trueColor = 0;

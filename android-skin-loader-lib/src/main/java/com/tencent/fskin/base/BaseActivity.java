@@ -1,10 +1,12 @@
-package cn.feng.skin.manager.base;
+package com.tencent.fskin.base;
 
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 
+import com.tencent.fskin.SkinInflaterFactory;
+import com.tencent.fskin.SkinManager;
 import com.tencent.fskin.SkinResources;
 
 import java.util.List;
@@ -12,8 +14,6 @@ import java.util.List;
 import cn.feng.skin.manager.entity.DynamicAttr;
 import cn.feng.skin.manager.listener.IDynamicNewView;
 import cn.feng.skin.manager.listener.ISkinUpdate;
-import cn.feng.skin.manager.loader.SkinInflaterFactory;
-import cn.feng.skin.manager.loader.SkinManager;
 
 /**
  * Base Activity for development
@@ -42,34 +42,34 @@ public class BaseActivity extends Activity implements ISkinUpdate, IDynamicNewVi
 	@Override
 	protected void onResume() {
 		super.onResume();
-		SkinManager.getInstance().attach(this);
+		SkinManager.INSTANCE.attach(this);
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		SkinManager.getInstance().detach(this);
+		SkinManager.INSTANCE.detach(this);
 		mSkinInflaterFactory.clean();
 	}
 	
-	/**
-	 * dynamic add a skin view 
-	 * 
-	 * @param view
-	 * @param attrName
-	 * @param attrValueResId
-	 */
-	protected void dynamicAddSkinEnableView(View view, String attrName, int attrValueResId){	
-		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, attrName, attrValueResId);
-	}
-	
-	protected void dynamicAddSkinEnableView(View view, List<DynamicAttr> pDAttrs){	
-		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
-	}
-	
-	final protected void enableResponseOnSkinChanging(boolean enable){
-		isResponseOnSkinChanging = enable;
-	}
+//	/**
+//	 * dynamic add a skin view
+//	 *
+//	 * @param view
+//	 * @param attrName
+//	 * @param attrValueResId
+//	 */
+//	protected void dynamicAddSkinEnableView(View view, String attrName, int attrValueResId){
+//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, attrName, attrValueResId);
+//	}
+//
+//	protected void dynamicAddSkinEnableView(View view, List<DynamicAttr> pDAttrs){
+//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+//	}
+//
+//	final protected void enableResponseOnSkinChanging(boolean enable){
+//		isResponseOnSkinChanging = enable;
+//	}
 
 	@Override
 	public void onThemeUpdate() {
@@ -81,14 +81,14 @@ public class BaseActivity extends Activity implements ISkinUpdate, IDynamicNewVi
 
 	@Override
 	public void dynamicAddView(View view, List<DynamicAttr> pDAttrs) {
-		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
 	}
 
-	@Override
-	public Resources getResources() {
-		Resources org = super.getResources();
-		SkinResources skinResourcesWrapper = new SkinResources(org);
-		return skinResourcesWrapper;
-
-	}
+//	@Override
+//	public Resources getResources() {
+//		Resources org = super.getResources();
+//		SkinResources skinResourcesWrapper = new SkinResources(org);
+//		return skinResourcesWrapper;
+//
+//	}
 }

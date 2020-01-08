@@ -12,6 +12,9 @@ public class SkinConfig {
 	public 	static final String 	SKIN_FROM	 			= 	"cn_feng_skin_from";
 	public 	static final int 		FROM_INTERNAL 			= 	0;
     public 	static final int 		FROM_EXTERNAL 			= 	1;
+
+
+
     public 	static final String 	ATTR_SKIN_ENABLE	    =   "enable";
 	
 	/**

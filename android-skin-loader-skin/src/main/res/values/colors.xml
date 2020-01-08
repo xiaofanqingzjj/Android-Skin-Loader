@@ -14,8 +14,8 @@
     <color name="color_new_item_synopsis">#CCFFCC</color>
     <color name="color_new_list_divider">#115eeb98</color>
 
-    <drawable name="color_news_item_normal">#003333</drawable>
-    <drawable name="color_news_item_pressed">#11ffffff</drawable>
+    <drawable name="color_news_item_normal">#ff0000</drawable>
+    <drawable name="color_news_item_pressed">#0000ff</drawable>
 
     <color name="color_sel_skin_btn_text">#ffffff</color>
 </resources>

@@ -1,7 +1,11 @@
 package cn.feng.skin.demo.app;
 
 import android.app.Application;
-import cn.feng.skin.manager.loader.SkinManager;
+
+import com.tencent.fskin.SkinManager;
+
+
+//import com.tencent.fskin.SkinManager;
 
 public class SkinApplication extends Application {
 	
@@ -15,7 +19,9 @@ public class SkinApplication extends Application {
 	 * Must call init first
 	 */
 	private void initSkinLoader() {
-		SkinManager.getInstance().init(this);
-		SkinManager.getInstance().load();
+//		SkinManager.getInstance().init(this);
+//		SkinManager.getInstance().load();
+
+		SkinManager.INSTANCE.init(this);
 	}
 }

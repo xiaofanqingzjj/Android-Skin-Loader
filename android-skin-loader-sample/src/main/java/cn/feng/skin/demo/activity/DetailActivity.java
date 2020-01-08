@@ -2,11 +2,14 @@ package cn.feng.skin.demo.activity;
 
 import android.os.Bundle;
 import android.widget.TextView;
+
+
+import com.tencent.fskin.base.BaseActivity;
+
 import cn.feng.skin.demo.R;
-import cn.feng.skin.manager.base.BaseActivity;
 import cn.feng.skin.manager.util.ResourceUtils;
 
-public class DetailActivity extends BaseActivity{
+public class DetailActivity extends BaseActivity {
 	
 	private TextView titleText;
 	private TextView detailText;

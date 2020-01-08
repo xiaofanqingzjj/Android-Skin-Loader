@@ -1,15 +1,15 @@
 package com.tencent.fskin
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.*
+import android.content.res.ColorStateList
+import android.content.res.Resources
+import android.content.res.XmlResourceParser
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.util.TypedValue
-import java.io.InputStream
 
-class SkinResourcesWrapper(var resources: Resources)
+class SkinResources(var resources: Resources)
     : Resources(resources.assets, resources.displayMetrics, resources.configuration) {
 
     companion object {
@@ -17,30 +17,41 @@ class SkinResourcesWrapper(var resources: Resources)
     }
 
 
-    private var mSkinResource: Resources? = null
+    private val skinResource: Resources?
+        get() {
+            return SkinManager.getCurrentSkinResource()
+        }
 
-    init {
+    private val skinPackageName: String?
+        get() {
+            return SkinManager.skinPackageName
+        }
 
-//        mContext.createConfigurationContext(Configuration().apply {
-//
-//        })
-//        Context.create
-    }
 
     private fun getResourceIdInSkin(id: Int): Int {
-        return mSkinResource?.run {
-            val type = getResourceTypeName(id)
-            val entryName = getResourceEntryName(id)
-            val packageName = getResourcePackageName(id)
-
+        return skinResource?.run {
             try {
-                getIdentifier(entryName, type, packageName)
+                val type = this@SkinResources.getResourceTypeName(id)
+                val entryName = this@SkinResources.getResourceEntryName(id)
+                val packageName = skinPackageName ?: this@SkinResources.getResourcePackageName(id)
+
+
+
+
+                val idInSkin = getIdentifier(entryName, type, packageName)
+
+
+                Log.i(TAG, "getResourceIdInSkin type:$type, name:$entryName, packageName:$packageName, idInSkin:$idInSkin")
+
+                idInSkin
             } catch (e: Exception) {
                 0
             }
         } ?: 0
     }
 
+
+    // 重写Resource加载资源的方法
 
 
     override fun getText(id: Int): CharSequence {
@@ -62,7 +73,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getString(idInSkin) ?: value
+                value = skinResource?.getString(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -78,7 +89,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getString(idInSkin, formatArgs) ?: value
+                value = skinResource?.getString(idInSkin, formatArgs) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -93,7 +104,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getString(idInSkin,quantity, formatArgs) ?: value
+                value = skinResource?.getString(idInSkin,quantity, formatArgs) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -108,7 +119,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getQuantityString(idInSkin,quantity) ?: value
+                value = skinResource?.getQuantityString(idInSkin,quantity) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -131,7 +142,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getStringArray(idInSkin) ?: value
+                value = skinResource?.getStringArray(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -146,7 +157,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getIntArray(idInSkin) ?: value
+                value = skinResource?.getIntArray(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -162,7 +173,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getDimension(idInSkin) ?: value
+                value = skinResource?.getDimension(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -178,7 +189,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getDimensionPixelOffset(idInSkin) ?: value
+                value = skinResource?.getDimensionPixelOffset(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -195,7 +206,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getDimensionPixelSize(idInSkin) ?: value
+                value = skinResource?.getDimensionPixelSize(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -217,7 +228,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getDrawable(idInSkin) ?: value
+                value = skinResource?.getDrawable(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -234,7 +245,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getDrawable(idInSkin, theme) ?: value
+                value = skinResource?.getDrawable(idInSkin, theme) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -252,7 +263,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getDrawableForDensity(idInSkin, density) ?: value
+                value = skinResource?.getDrawableForDensity(idInSkin, density) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -264,12 +275,12 @@ class SkinResourcesWrapper(var resources: Resources)
 
         Log.d(TAG, "getDrawableForDensity:$id, density:$density")
 
-        var value = super.getDrawableForDensity(id, density)
+        var value = super.getDrawableForDensity(id, density, theme)
 
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getDrawableForDensity(idInSkin, density) ?: value
+                value = skinResource?.getDrawableForDensity(idInSkin, density) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -285,14 +296,35 @@ class SkinResourcesWrapper(var resources: Resources)
 
     override fun getColor(id: Int): Int {
 
-        Log.d(TAG, "getColor:$id")
+
+//        val originColor: Int = context.getResources().getColor(resId)
+//        if (mResources == null || isDefaultSkin) {
+//            return originColor
+//        }
+//
+//        val resName: String = context.getResources().getResourceEntryName(resId)
+//
+//        val trueResId: Int = mResources.getIdentifier(resName, "color", skinPackageName)
+//        var trueColor = 0
+//
+//        trueColor = try {
+//            mResources.getColor(trueResId)
+//        } catch (e: NotFoundException) {
+//            e.printStackTrace()
+//            originColor
+//        }
+//
+//        return trueColor
+
 
         var value = super.getColor(id)
 
         val idInSkin  = getResourceIdInSkin(id)
+
+        Log.d(TAG, "getColor id:$id, orgValue:$value, idInSkin:$idInSkin")
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getColor(idInSkin) ?: value
+                value = skinResource?.getColor(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -306,7 +338,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getColor(idInSkin, theme) ?: value
+                value = skinResource?.getColor(idInSkin, theme) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -321,7 +353,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getColorStateList(idInSkin) ?: value
+                value = skinResource?.getColorStateList(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -335,7 +367,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getColorStateList(idInSkin, theme) ?: value
+                value = skinResource?.getColorStateList(idInSkin, theme) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -349,7 +381,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getBoolean(idInSkin) ?: value
+                value = skinResource?.getBoolean(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -363,7 +395,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getInteger(idInSkin) ?: value
+                value = skinResource?.getInteger(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -378,7 +410,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getFloat(idInSkin) ?: value
+                value = skinResource?.getFloat(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -392,7 +424,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getLayout(idInSkin) ?: value
+                value = skinResource?.getLayout(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -406,7 +438,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getAnimation(idInSkin) ?: value
+                value = skinResource?.getAnimation(idInSkin) ?: value
             } catch (e: Exception) {
                 // ignore
             }
@@ -441,7 +473,7 @@ class SkinResourcesWrapper(var resources: Resources)
         val idInSkin  = getResourceIdInSkin(id)
         if (idInSkin != 0) {
             try {
-                value = mSkinResource?.getValue(idInSkin, outValue, resolveRefs) ?: value
+                value = skinResource?.getValue(idInSkin, outValue, resolveRefs) ?: value
             } catch (e: Exception) {
                 // ignore
             }

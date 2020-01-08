@@ -6,12 +6,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.bedrock.permissionrequestor.PermissionsRequestor;
+import com.tencent.fskin.base.BaseFragmentActivity;
 
 import cn.feng.skin.demo.R;
 import cn.feng.skin.demo.fragment.ArticleListFragment;
-import cn.feng.skin.manager.base.BaseFragmentActivity;
 
-public class MainActivity extends BaseFragmentActivity{
+public class MainActivity extends BaseFragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

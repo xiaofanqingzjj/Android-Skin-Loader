@@ -113,7 +113,10 @@ public class SkinInflaterFactory implements Factory {
 					int id = Integer.parseInt(attrValue.substring(1));
 					String entryName = context.getResources().getResourceEntryName(id);
 					String typeName = context.getResources().getResourceTypeName(id);
+
+
 					SkinAttr mSkinAttr = AttrFactory.get(attrName, id, entryName, typeName);
+
 					if (mSkinAttr != null) {
 						viewAttrs.add(mSkinAttr);
 					}

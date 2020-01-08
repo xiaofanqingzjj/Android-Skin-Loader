@@ -8,13 +8,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.tencent.fskin.SkinManager;
+import com.tencent.fskin.base.BaseActivity;
+
 import java.io.File;
 
 import cn.feng.skin.demo.R;
-import cn.feng.skin.manager.base.BaseActivity;
-import cn.feng.skin.manager.listener.ILoaderListener;
-import cn.feng.skin.manager.loader.SkinManager;
-import cn.feng.skin.manager.util.L;
 
 public class SettingActivity extends BaseActivity {
 
@@ -49,7 +49,7 @@ public class SettingActivity extends BaseActivity {
 		setNightSkinBtn = (Button) findViewById(R.id.set_night_skin);
 		
 		
-		isOfficalSelected = !SkinManager.getInstance().isExternalSkin();
+//		isOfficalSelected = !SkinManager.getInstance().isExternalSkin();
 		
 		if(isOfficalSelected){
 			setOfficalSkinBtn.setText("官方默认(当前)");
@@ -77,13 +77,17 @@ public class SettingActivity extends BaseActivity {
 	}
 
 	protected void onSkinResetClick() {
-		if(!isOfficalSelected){
-			SkinManager.getInstance().restoreDefaultTheme();
+//		if(!isOfficalSelected){
+			SkinManager.INSTANCE.restoreDefaultTheme();
+
+//			SkinManager.getInstance().restoreDefaultTheme();
+
+
 			Toast.makeText(getApplicationContext(), "切换成功", Toast.LENGTH_SHORT).show();			
 			setOfficalSkinBtn.setText("官方默认(当前)");
 			setNightSkinBtn.setText("黑色幻想");
 			isOfficalSelected = true;
-		}
+//		}
 	}
 
 	private void onSkinSetClick() {
@@ -96,27 +100,30 @@ public class SettingActivity extends BaseActivity {
 			return;
 		}
 
-		SkinManager.getInstance().load(skin.getAbsolutePath(),
-				new ILoaderListener() {
-					@Override
-					public void onStart() {
-						L.e("startloadSkin");
-					}
+//		SkinManager.getInstance().load(skin.getAbsolutePath(), null);
 
-					@Override
-					public void onSuccess() {
-						L.e("loadSkinSuccess");
-						Toast.makeText(getApplicationContext(), "切换成功", Toast.LENGTH_SHORT).show();
-						setNightSkinBtn.setText("黑色幻想(当前)");
-						setOfficalSkinBtn.setText("官方默认");		
-						isOfficalSelected = false;
-					}
-
-					@Override
-					public void onFailed() {
-						L.e("loadSkinFail");
-						Toast.makeText(getApplicationContext(), "切换失败", Toast.LENGTH_SHORT).show();
-					}
-				});
+		SkinManager.INSTANCE.applySkin(skin.getAbsolutePath(), null);
+//		SkinManager.getInstance().load(skin.getAbsolutePath(),
+//				new ILoaderListener() {
+//					@Override
+//					public void onStart() {
+//						L.e("startloadSkin");
+//					}
+//
+//					@Override
+//					public void onSuccess() {
+//						L.e("loadSkinSuccess");
+//						Toast.makeText(getApplicationContext(), "切换成功", Toast.LENGTH_SHORT).show();
+//						setNightSkinBtn.setText("黑色幻想(当前)");
+//						setOfficalSkinBtn.setText("官方默认");
+//						isOfficalSelected = false;
+//					}
+//
+//					@Override
+//					public void onFailed() {
+//						L.e("loadSkinFail");
+//						Toast.makeText(getApplicationContext(), "切换失败", Toast.LENGTH_SHORT).show();
+//					}
+//				});
 	}
 }
