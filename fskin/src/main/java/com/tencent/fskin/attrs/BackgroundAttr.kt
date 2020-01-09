@@ -2,13 +2,13 @@ package com.tencent.fskin.attrs
 
 import android.view.View
 import com.tencent.fskin.SkinManager
-import com.tencent.fskin.SkinAttr
+import com.tencent.fskin.SkinElementAttr
 
 
 /**
  * android:background
  */
-class BackgroundAttr : SkinAttr() {
+class BackgroundAttr : SkinElementAttr() {
 
     override fun apply(view: View?) {
         view?.run {

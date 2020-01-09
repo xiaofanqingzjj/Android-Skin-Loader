@@ -9,7 +9,7 @@ import android.view.View
  * 表示一个xml元素的属性，当皮肤变化时，如果View上有对应的属性并引用了资源，则需要动态修改
  *
  */
-abstract class SkinAttr(
+abstract class SkinElementAttr(
 
         /**
          * xml属性名，比如：background、src、textColor等等

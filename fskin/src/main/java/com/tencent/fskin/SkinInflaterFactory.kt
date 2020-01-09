@@ -24,7 +24,7 @@ class SkinInflaterFactory : LayoutInflater.Factory {
     /**
      * Store the view item that need skin changing in the activity
      */
-    private val mSkinItems: MutableList<SkinAware> = ArrayList()
+    private val mSkinItems: MutableList<SkinElement> = ArrayList()
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? { // if this is NOT enable to be skined , simplly skip it
         // 先收集属性，看是否有换肤支持的属性，如果没有，则不拦截
@@ -35,7 +35,7 @@ class SkinInflaterFactory : LayoutInflater.Factory {
 
         val view = createView(context, name, attrs) ?: return null
 
-        mSkinItems.add(SkinAware(view, skinAttrs).apply {
+        mSkinItems.add(SkinElement(view, skinAttrs).apply {
             apply()
         })
 
@@ -75,13 +75,13 @@ class SkinInflaterFactory : LayoutInflater.Factory {
         return view
     }
 
-    private fun parseSkinAttr(context: Context, attrs: AttributeSet) :  ArrayList<SkinAttr>{
-        val viewAttrs: ArrayList<SkinAttr> = ArrayList()
+    private fun parseSkinAttr(context: Context, attrs: AttributeSet) :  ArrayList<SkinElementAttr>{
+        val viewAttrs: ArrayList<SkinElementAttr> = ArrayList()
 
         for (i in 0 until attrs.attributeCount) {
             val attrName = attrs.getAttributeName(i)
             val attrValue = attrs.getAttributeValue(i)
-            if (!SkinAttrFactory.isSupportedAttr(attrName)) { // 看属性是否是支持换肤的属性
+            if (!SkinElementAttrFactory.isSupportedAttr(attrName)) { // 看属性是否是支持换肤的属性
                 continue
             }
 
@@ -92,7 +92,7 @@ class SkinInflaterFactory : LayoutInflater.Factory {
                     val entryName = context.resources.getResourceEntryName(id)
                     val typeName = context.resources.getResourceTypeName(id)
 
-                    val mSkinAttr = SkinAttrFactory.createSkinAttr(attrName, id, entryName, typeName)
+                    val mSkinAttr = SkinElementAttrFactory.createSkinAttr(attrName, id, entryName, typeName)
 
                     if (mSkinAttr != null) {
                         viewAttrs.add(mSkinAttr)

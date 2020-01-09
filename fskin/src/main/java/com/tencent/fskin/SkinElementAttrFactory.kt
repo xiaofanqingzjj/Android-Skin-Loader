@@ -8,11 +8,11 @@ import com.tencent.fskin.attrs.TextColorAttr
  * 在这里可以添加动态换肤的属性
  *
  */
-object SkinAttrFactory {
+object SkinElementAttrFactory {
 
-    private val supportSkinAttrs: MutableMap<String, Class<out SkinAttr>> = mutableMapOf()
+    private val supportSkinAttrs: MutableMap<String, Class<out SkinElementAttr>> = mutableMapOf()
 
-    fun registerSkinAttr(attrName: String, attr: Class<out SkinAttr>) {
+    fun registerSkinAttr(attrName: String, attr: Class<out SkinElementAttr>) {
         supportSkinAttrs[attrName] = attr
     }
 
@@ -26,7 +26,7 @@ object SkinAttrFactory {
     /**
      *
      */
-    fun createSkinAttr(attrName: String, attrValueRefId: Int, attrValueRefName: String?, typeName: String?): SkinAttr? {
+    fun createSkinAttr(attrName: String, attrValueRefId: Int, attrValueRefName: String?, typeName: String?): SkinElementAttr? {
         val skinAttr = supportSkinAttrs[attrName]?.newInstance()
         skinAttr?.run {
             this.attrName = attrName
