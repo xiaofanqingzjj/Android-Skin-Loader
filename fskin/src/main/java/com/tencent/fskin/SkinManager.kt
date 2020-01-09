@@ -58,6 +58,8 @@ object SkinManager {
     }
 
 
+
+
     /**
      * 该对象用来收集Activity里带有支持换肤属性的组件
      */
