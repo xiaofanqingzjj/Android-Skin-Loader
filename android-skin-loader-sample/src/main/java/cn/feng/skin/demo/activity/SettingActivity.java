@@ -2,6 +2,7 @@ package cn.feng.skin.demo.activity;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -10,13 +11,12 @@ import android.widget.Toast;
 
 
 import com.tencent.fskin.SkinManager;
-import com.tencent.fskin.base.BaseActivity;
 
 import java.io.File;
 
 import cn.feng.skin.demo.R;
 
-public class SettingActivity extends BaseActivity {
+public class SettingActivity extends FragmentActivity {
 
 	/**
 	 * Put this skin file on the root of sdcard

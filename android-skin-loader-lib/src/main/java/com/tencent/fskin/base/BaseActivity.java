@@ -23,66 +23,66 @@ import cn.feng.skin.manager.listener.ISkinUpdate;
  * 
  * @author fengjun
  */
-public class BaseActivity extends Activity implements ISkinUpdate, IDynamicNewView{
+public class BaseActivity extends Activity {
 	
 	/**
-	 * Whether response to skin changing after create
-	 */
-	private boolean isResponseOnSkinChanging = true;
-	
-	private SkinInflaterFactory mSkinInflaterFactory;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		mSkinInflaterFactory = new SkinInflaterFactory();
-		getLayoutInflater().setFactory(mSkinInflaterFactory);
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		SkinManager.INSTANCE.attach(this);
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		SkinManager.INSTANCE.detach(this);
-		mSkinInflaterFactory.clean();
-	}
-	
-//	/**
-//	 * dynamic add a skin view
-//	 *
-//	 * @param view
-//	 * @param attrName
-//	 * @param attrValueResId
+//	 * Whether response to skin changing after create
 //	 */
-//	protected void dynamicAddSkinEnableView(View view, String attrName, int attrValueResId){
-//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, attrName, attrValueResId);
+//	private boolean isResponseOnSkinChanging = true;
+//
+//	private SkinInflaterFactory mSkinInflaterFactory;
+//
+//	@Override
+//	protected void onCreate(Bundle savedInstanceState) {
+//		super.onCreate(savedInstanceState);
+//		mSkinInflaterFactory = new SkinInflaterFactory();
+//		getLayoutInflater().setFactory(mSkinInflaterFactory);
 //	}
 //
-//	protected void dynamicAddSkinEnableView(View view, List<DynamicAttr> pDAttrs){
-//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		SkinManager.INSTANCE.attach(this);
 //	}
 //
-//	final protected void enableResponseOnSkinChanging(boolean enable){
-//		isResponseOnSkinChanging = enable;
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+//		SkinManager.INSTANCE.detach(this);
+//		mSkinInflaterFactory.clean();
 //	}
-
-	@Override
-	public void onThemeUpdate() {
-		if(!isResponseOnSkinChanging){
-			return;
-		}
-		mSkinInflaterFactory.applySkin();
-	}
-
-	@Override
-	public void dynamicAddView(View view, List<DynamicAttr> pDAttrs) {
-//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
-	}
+//
+////	/**
+////	 * dynamic add a skin view
+////	 *
+////	 * @param view
+////	 * @param attrName
+////	 * @param attrValueResId
+////	 */
+////	protected void dynamicAddSkinEnableView(View view, String attrName, int attrValueResId){
+////		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, attrName, attrValueResId);
+////	}
+////
+////	protected void dynamicAddSkinEnableView(View view, List<DynamicAttr> pDAttrs){
+////		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+////	}
+////
+////	final protected void enableResponseOnSkinChanging(boolean enable){
+////		isResponseOnSkinChanging = enable;
+////	}
+//
+//	@Override
+//	public void onThemeUpdate() {
+//		if(!isResponseOnSkinChanging){
+//			return;
+//		}
+//		mSkinInflaterFactory.applySkin();
+//	}
+//
+//	@Override
+//	public void dynamicAddView(View view, List<DynamicAttr> pDAttrs) {
+////		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+//	}
 
 //	@Override
 //	public Resources getResources() {

@@ -6,18 +6,16 @@ import com.tencent.fskin.model.SkinAttr
 
 
 /**
- * 背景皮肤
+ * android:background
  */
 class BackgroundAttr : SkinAttr() {
 
     override fun apply(view: View?) {
-
         view?.run {
             when (attrValueTypeName) {
                 RES_TYPE_NAME_COLOR -> setBackgroundColor(SkinManager.resources.getColor(attrValueRefId))
                 RES_TYPE_NAME_DRAWABLE -> background = (SkinManager.resources.getDrawable(attrValueRefId))
             }
         }
-
     }
 }

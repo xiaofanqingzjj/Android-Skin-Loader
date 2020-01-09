@@ -1,15 +1,15 @@
 package cn.feng.skin.demo.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 
-import com.tencent.fskin.base.BaseActivity;
 
 import cn.feng.skin.demo.R;
-import cn.feng.skin.manager.util.ResourceUtils;
+import cn.feng.skin.demo.activity.util.ResourceUtils;
 
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends FragmentActivity {
 	
 	private TextView titleText;
 	private TextView detailText;

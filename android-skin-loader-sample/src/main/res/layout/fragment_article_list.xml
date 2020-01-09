@@ -18,7 +18,6 @@
         android:layout_below="@id/title_bar_layout"
         android:divider="@color/color_new_list_divider"
         android:dividerHeight="1dp"
-        android:listSelector="@drawable/news_item_selector"
         android:scrollbars="none"
         skin:enable="true" />
 

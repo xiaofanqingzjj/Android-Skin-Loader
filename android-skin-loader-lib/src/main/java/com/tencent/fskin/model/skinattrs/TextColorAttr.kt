@@ -5,6 +5,10 @@ import android.widget.TextView
 import com.tencent.fskin.SkinManager
 import com.tencent.fskin.model.SkinAttr
 
+
+/**
+ * android:textColor
+ */
 class TextColorAttr : SkinAttr() {
 
     override fun apply(view: View?) {

@@ -3,6 +3,10 @@ package cn.feng.skin.demo.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,26 +19,28 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.feng.skin.demo.R;
 import cn.feng.skin.demo.activity.DetailActivity;
 import cn.feng.skin.demo.activity.SettingActivity;
+import cn.feng.skin.demo.activity.util.CommonBaseAdapter;
+import cn.feng.skin.demo.activity.util.CommonViewHolder;
 import cn.feng.skin.demo.entity.News;
-import cn.feng.skin.manager.base.BaseFragment;
-import cn.feng.skin.manager.entity.AttrFactory;
-import cn.feng.skin.manager.entity.DynamicAttr;
-import cn.feng.skin.manager.util.CommonBaseAdapter;
-import cn.feng.skin.manager.util.CommonViewHolder;
 
-public class ArticleListFragment extends BaseFragment{
+public class ArticleListFragment extends Fragment {
+
+	static final String TAG = "ArticleListFragment@@";
 
 	private TextView titleText;
 	private Button settingBtn;
+
 	private ListView newsList;
 	private RelativeLayout titleBarLayout;
 	private NewsAdapter adapter;
+
 	private List<News> datas;
 
 	public static ArticleListFragment newInstance(){
@@ -47,7 +53,16 @@ public class ArticleListFragment extends BaseFragment{
 		
 		initData();
 	}
-	
+
+	@NonNull
+	@Override
+	public LayoutInflater onGetLayoutInflater(@Nullable Bundle savedInstanceState) {
+		LayoutInflater li = super.onGetLayoutInflater(savedInstanceState);
+
+		Log.d(TAG, "onGetLayoutInflater:" + li + ", factory:" + li.getFactory());
+		return li;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_article_list, container, false);
@@ -67,7 +82,10 @@ public class ArticleListFragment extends BaseFragment{
 	
 	private void initView(View v) {
 		titleBarLayout = (RelativeLayout) v.findViewById(R.id.title_bar_layout);
+
 		newsList = (ListView) v.findViewById(R.id.news_list_view);
+
+
 		adapter = new NewsAdapter(this.getActivity(), datas);
 		
 		newsList.setAdapter(adapter);
@@ -101,22 +119,22 @@ public class ArticleListFragment extends BaseFragment{
 	}
 	
 	private void dynamicAddTitleView() {
-		TextView textView = new TextView(getActivity());
-		textView.setText("Small Article (动态new)");
-		RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		param.addRule(RelativeLayout.CENTER_IN_PARENT);
-		textView.setLayoutParams(param);
-		textView.setTextColor(getActivity().getResources().getColor(R.color.color_title_bar_text));
-		textView.setTextSize(20);
-
-		titleBarLayout.addView(textView);
-		
-		List<DynamicAttr> mDynamicAttr = new ArrayList<DynamicAttr>();
-		mDynamicAttr.add(new DynamicAttr(AttrFactory.TEXT_COLOR, R.color.color_title_bar_text));
-		dynamicAddView(textView, mDynamicAttr);
+//		TextView textView = new TextView(getActivity());
+//		textView.setText("Small Article (动态new)");
+//		RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//		param.addRule(RelativeLayout.CENTER_IN_PARENT);
+//		textView.setLayoutParams(param);
+//		textView.setTextColor(getActivity().getResources().getColor(R.color.color_title_bar_text));
+//		textView.setTextSize(20);
+//
+//		titleBarLayout.addView(textView);
+//
+//		List<DynamicAttr> mDynamicAttr = new ArrayList<DynamicAttr>();
+//		mDynamicAttr.add(new DynamicAttr(AttrFactory.TEXT_COLOR, R.color.color_title_bar_text));
+//		dynamicAddView(textView, mDynamicAttr);
 	}
 	
-	private class NewsAdapter extends CommonBaseAdapter<News>{
+	private class NewsAdapter extends CommonBaseAdapter<News> {
  
 		public NewsAdapter(Context context, List<News> mDatas) {
 			super(context, mDatas, new int[]{R.layout.item_news_title});

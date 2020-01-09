@@ -23,74 +23,74 @@ import cn.feng.skin.manager.listener.ISkinUpdate;
  * 
  * @author fengjun
  */
-public class BaseFragmentActivity extends FragmentActivity implements ISkinUpdate, IDynamicNewView{
+public class BaseFragmentActivity extends FragmentActivity {
 	
-	/**
-	 * Whether response to skin changing after create
-	 */
-	private boolean isResponseOnSkinChanging = true;
-	
-	private SkinInflaterFactory mSkinInflaterFactory;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-
-
-
-//		getLayoutInflater()
-
-        try {
-            Field field = LayoutInflater.class.getDeclaredField("mFactorySet");
-            field.setAccessible(true);
-            field.setBoolean(getLayoutInflater(), false);
-            
-    		mSkinInflaterFactory = new SkinInflaterFactory();
-    		getLayoutInflater().setFactory(mSkinInflaterFactory);
-
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } 
-		
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		SkinManager.INSTANCE.attach(this);
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		SkinManager.INSTANCE.detach(this);
-	}
-	
-//	protected void dynamicAddSkinEnableView(View view, String attrName, int attrValueResId){
-//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, attrName, attrValueResId);
+//	/**
+//	 * Whether response to skin changing after create
+//	 */
+//	private boolean isResponseOnSkinChanging = true;
+//
+//	private SkinInflaterFactory mSkinInflaterFactory;
+//
+//	@Override
+//	protected void onCreate(Bundle savedInstanceState) {
+//		super.onCreate(savedInstanceState);
+//
+//
+//
+//
+////		getLayoutInflater()
+//
+//        try {
+//            Field field = LayoutInflater.class.getDeclaredField("mFactorySet");
+//            field.setAccessible(true);
+//            field.setBoolean(getLayoutInflater(), false);
+//
+//    		mSkinInflaterFactory = new SkinInflaterFactory();
+//    		getLayoutInflater().setFactory(mSkinInflaterFactory);
+//
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//
 //	}
 //
-//	protected void dynamicAddSkinEnableView(View view, List<DynamicAttr> pDAttrs){
-//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		SkinManager.INSTANCE.attach(this);
 //	}
-	
-	final protected void enableResponseOnSkinChanging(boolean enable){
-		isResponseOnSkinChanging = enable;
-	}
-
-	@Override
-	public void onThemeUpdate() {
-		if(!isResponseOnSkinChanging) return;
-		mSkinInflaterFactory.applySkin();
-	}
-	
-	@Override
-	public void dynamicAddView(View view, List<DynamicAttr> pDAttrs) {
-//		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
-	}
+//
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+//		SkinManager.INSTANCE.detach(this);
+//	}
+//
+////	protected void dynamicAddSkinEnableView(View view, String attrName, int attrValueResId){
+////		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, attrName, attrValueResId);
+////	}
+////
+////	protected void dynamicAddSkinEnableView(View view, List<DynamicAttr> pDAttrs){
+////		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+////	}
+//
+//	final protected void enableResponseOnSkinChanging(boolean enable){
+//		isResponseOnSkinChanging = enable;
+//	}
+//
+//	@Override
+//	public void onThemeUpdate() {
+//		if(!isResponseOnSkinChanging) return;
+//		mSkinInflaterFactory.applySkin();
+//	}
+//
+//	@Override
+//	public void dynamicAddView(View view, List<DynamicAttr> pDAttrs) {
+////		mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, pDAttrs);
+//	}
 }

@@ -2,15 +2,22 @@ package com.tencent.fskin.model
 
 import android.view.View
 
+
+/**
+ * 一个皮肤属性
+ *
+ * 表示一个xml元素的属性，当皮肤变化时，如果View上有对应的属性并引用了资源，则需要动态修改
+ *
+ */
 abstract class SkinAttr(
 
         /**
-         * 属性名
+         * xml属性名，比如：background、src、textColor等等
          */
         var attrName: String? = null,
 
         /**
-         * 属性值
+         * 属性的资源引用id
          */
         var attrValueRefId: Int = 0,
 
@@ -27,7 +34,7 @@ abstract class SkinAttr(
 
 
     /**
-     * 当皮肤改变的时候重新给View设置对应的值
+     * 当皮肤改变的时候重新给View对应的属性设置皮肤包里的新值
      */
     open fun apply(view: View?) {
 

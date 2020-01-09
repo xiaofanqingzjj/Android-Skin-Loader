@@ -3,15 +3,15 @@ package cn.feng.skin.demo.activity;
 import android.Manifest;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.bedrock.permissionrequestor.PermissionsRequestor;
-import com.tencent.fskin.base.BaseFragmentActivity;
 
 import cn.feng.skin.demo.R;
 import cn.feng.skin.demo.fragment.ArticleListFragment;
 
-public class MainActivity extends BaseFragmentActivity {
+public class MainActivity extends FragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

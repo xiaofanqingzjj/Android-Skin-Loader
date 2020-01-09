@@ -4,6 +4,10 @@ import com.tencent.fskin.model.skinattrs.BackgroundAttr
 import com.tencent.fskin.model.skinattrs.TextColorAttr
 
 
+/**
+ * 在这里可以添加动态换肤的属性
+ *
+ */
 object SkinAttrFactory {
 
     private val supportSkinAttrs: MutableMap<String, Class<out SkinAttr>> = mutableMapOf()
