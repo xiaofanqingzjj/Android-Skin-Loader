@@ -24,7 +24,7 @@ class SkinInflaterFactory : LayoutInflater.Factory {
     /**
      * Store the view item that need skin changing in the activity
      */
-    private val mSkinItems: MutableList<SkinElement> = ArrayList()
+    internal val mSkinItems: MutableMap<View, SkinElement> = mutableMapOf()
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? { // if this is NOT enable to be skined , simplly skip it
         // 先收集属性，看是否有换肤支持的属性，如果没有，则不拦截
@@ -35,9 +35,9 @@ class SkinInflaterFactory : LayoutInflater.Factory {
 
         val view = createView(context, name, attrs) ?: return null
 
-        mSkinItems.add(SkinElement(view, skinAttrs).apply {
+        mSkinItems[view] = SkinElement(view, skinAttrs).apply {
             apply()
-        })
+        }
 
         return view
     }
@@ -109,15 +109,13 @@ class SkinInflaterFactory : LayoutInflater.Factory {
 
     fun applySkin() {
         mSkinItems.forEach {
-            if (it.view != null) {
-                it.apply()
-            }
+            it.value.apply()
         }
     }
 
     fun clean() {
         mSkinItems?.forEach {
-            it.clean()
+            it.value.clean()
         }
         mSkinItems.clear()
     }

@@ -40,7 +40,9 @@ class SkinInflaterFactory : LayoutInflater.Factory {
         val view = createView(context, name, attrs) ?: return null
 
         mSkinItems.add(SkinAware(view, skinAttrs).apply {
-            apply()
+
+
+//            apply()
         })
 
         return view

@@ -33,6 +33,11 @@ abstract class SkinElementAttr(
         var attrValueTypeName: String? = null) {
 
 
+
+    internal fun applyInner(view: View?) {
+        apply(view)
+    }
+
     /**
      * 当皮肤改变的时候重新给View对应的属性设置皮肤包里的新值
      */

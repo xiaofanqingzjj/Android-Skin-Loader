@@ -13,7 +13,7 @@ data class SkinElement(
         /**
          * 关联的View
          */
-        var view: View? = null,
+        var view: View,
 
         /**
          * 当前View上需要修改的属性
@@ -26,7 +26,7 @@ data class SkinElement(
      */
     fun apply() {
         attrs.forEach {
-            it.apply(view)
+            it.applyInner(view)
         }
     }
 

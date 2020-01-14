@@ -7,6 +7,7 @@ import android.content.res.AssetManager
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import com.tencent.fskin.util.PreferencesUtils
 import com.tencent.fskin.util.async
 import java.io.File
@@ -50,11 +51,44 @@ object SkinManager {
 
         // 如果设置了皮肤，加载设置的皮肤
         async {
-            val skinPath = currentSkinPath()
-            if (!skinPath.isNullOrEmpty()) {
-                applySkin(skinPath)
-            }
+//            val skinPath = currentSkinPath()
+//            if (!skinPath.isNullOrEmpty()) {
+//                applySkin(skinPath)
+//            }
         }
+    }
+
+
+    /**
+     * 当元素的属性值是通过代码设置的时候，需要手动把要换肤的元素和属性添加到皮肤框架中
+     */
+    fun addSkinAttr(activity: Activity, view: View, attrName: String, value: Int) {
+
+        // 如果不支持，则直接退出
+        if (!SkinElementAttrFactory.isSupportedAttr(attrName)) return
+
+        val activitySkinChange = mSkins[activity] ?: return
+
+        val inflaterFactory = activitySkinChange.mSkinInflaterFactory
+        val skinItems = inflaterFactory.mSkinItems
+
+        if (!skinItems.keys.contains(view)) {
+            skinItems[view] = SkinElement(view)
+        }
+
+        val attrs = skinItems[view]?.attrs
+
+        val entryName = activity.resources.getResourceEntryName(value)
+        val typeName = activity.resources.getResourceTypeName(value)
+
+        val skinElementAttr = SkinElementAttrFactory.createSkinAttr(attrName, value, entryName, typeName) ?: return
+
+        attrs?.add(skinElementAttr)
+
+
+        // 初始加进来的时候需要重新设置一下
+        skinElementAttr.applyInner(view)
+
     }
 
 

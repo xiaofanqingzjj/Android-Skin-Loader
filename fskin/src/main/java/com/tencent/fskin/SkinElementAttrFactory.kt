@@ -1,6 +1,7 @@
 package com.tencent.fskin
 
 import com.tencent.fskin.attrs.BackgroundAttr
+import com.tencent.fskin.attrs.ImageSrcAttr
 import com.tencent.fskin.attrs.TextColorAttr
 
 
@@ -20,6 +21,7 @@ object SkinElementAttrFactory {
     init {
         registerSkinAttr("background", BackgroundAttr::class.java)
         registerSkinAttr("textColor", TextColorAttr::class.java)
+        registerSkinAttr("src", ImageSrcAttr::class.java)
     }
 
 
