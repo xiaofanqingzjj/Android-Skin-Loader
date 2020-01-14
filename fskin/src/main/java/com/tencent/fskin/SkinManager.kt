@@ -51,10 +51,10 @@ object SkinManager {
 
         // 如果设置了皮肤，加载设置的皮肤
         async {
-//            val skinPath = currentSkinPath()
-//            if (!skinPath.isNullOrEmpty()) {
-//                applySkin(skinPath)
-//            }
+            val skinPath = currentSkinPath()
+            if (!skinPath.isNullOrEmpty()) {
+                applySkin(skinPath)
+            }
         }
     }
 
