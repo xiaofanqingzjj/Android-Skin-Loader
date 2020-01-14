@@ -1,16 +1,11 @@
 # Android-Skin-Loader 
 
-> 联系我 : fengjun.dev@gmail.com  
-> 
-> 个人博客 : [http://allenfeng.com/](http://allenfeng.com/)
->
+
+
 > 一个通过动态加载本地皮肤包进行换肤的皮肤框架
 
-## 更新日志
-- 导入到Android Studio，使用gradle构建皮肤包（见`7. 皮肤包是什么？如何生成？`）(2015-12-02)
-- 解决Fragment换肤在某些版本的support-v4包下失效的问题（感谢@javake同学）(2015-12-02)
-- 对`textColor`加入selector类型的资源的换肤支持(感谢@pinotao同学) （2015-09-26）
-- 添加在代码中创建的View的换肤支持 (2015-09-24)
+没有任何侵入性，接入只需一行代码
+
 
 ## 工程目录介绍
 ```
@@ -36,12 +31,12 @@ Android-Skin-Loader
 
 #### 1. 在`Application`中进行初始化
 ```java
-public class SkinApplication extends Application {
+public class YourApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		// Must call init first 
 		SkinManager.getInstance().init(this);
-		SkinManager.getInstance().load();
+		
 	}
 }
 ```
