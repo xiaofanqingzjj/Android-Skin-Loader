@@ -1,8 +1,6 @@
 package com.tencent.fskin
 
-import com.tencent.fskin.attrs.BackgroundAttr
-import com.tencent.fskin.attrs.ImageSrcAttr
-import com.tencent.fskin.attrs.TextColorAttr
+import com.tencent.fskin.attrs.*
 
 
 /**
@@ -22,6 +20,21 @@ object SkinElementAttrFactory {
         registerSkinAttr("background", BackgroundAttr::class.java)
         registerSkinAttr("textColor", TextColorAttr::class.java)
         registerSkinAttr("src", ImageSrcAttr::class.java)
+        registerSkinAttr("textSize", TextSizeAttr::class.java)
+
+        registerSkinAttr("drawableLeft", TextViewDrawableAttr::class.java)
+        registerSkinAttr("drawableTop", TextViewDrawableAttr::class.java)
+        registerSkinAttr("drawableRight", TextViewDrawableAttr::class.java)
+        registerSkinAttr("drawableBottom", TextViewDrawableAttr::class.java)
+
+        // padding
+        registerSkinAttr("padding", PaddingAttr::class.java)
+        registerSkinAttr("paddingLeft", PaddingAttr::class.java)
+        registerSkinAttr("paddingTop", PaddingAttr::class.java)
+        registerSkinAttr("paddingRight", PaddingAttr::class.java)
+        registerSkinAttr("paddingBottom", PaddingAttr::class.java)
+
+
     }
 
 

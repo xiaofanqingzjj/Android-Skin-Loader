@@ -1,6 +1,8 @@
 package com.tencent.fskin
 
+import android.util.Log
 import android.view.View
+import com.tencent.tfkin.BuildConfig
 
 
 /**
@@ -34,30 +36,28 @@ abstract class SkinElementAttr(
 
 
 
-    internal fun applyInner(view: View?) {
-        apply(view)
+
+    internal fun initApply(view: View?) {
+        if (!SkinManager.isDefaultSkin()) {
+            apply(view)
+        }
     }
 
     /**
      * 当皮肤改变的时候重新给View对应的属性设置皮肤包里的新值
      */
     open fun apply(view: View?) {
-
-
-
-
+        if (BuildConfig.DEBUG) {
+            Log.d("SkinElementAttr", "apply attr:$this, view:$view")
+        }
     }
 
     override fun toString(): String {
-        return ("SkinAttr \n[\nattrName=" + attrName + ", \n"
-                + "attrValueRefId=" + attrValueRefId + ", \n"
-                + "attrValueRefName=" + attrValueRefName + ", \n"
+        return ("SkinAttr [attrName=" + attrName + ", "
+                + "attrValueRefId=" + attrValueRefId + ","
+                + "attrValueRefName=" + attrValueRefName + ", "
                 + "attrValueTypeName=" + attrValueTypeName
-                + "\n]")
+                + "]")
     }
 
-    companion object {
-        const val RES_TYPE_NAME_COLOR = "color"
-        const val RES_TYPE_NAME_DRAWABLE = "drawable"
-    }
 }

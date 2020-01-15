@@ -1,5 +1,6 @@
 package com.tencent.fskin.attrs
 
+import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import com.tencent.fskin.SkinManager
@@ -9,10 +10,10 @@ import com.tencent.fskin.SkinElementAttr
 /**
  * android:textColor
  */
-class TextColorAttr : SkinElementAttr() {
+class TextSizeAttr : SkinElementAttr() {
 
     companion object {
-        const val TAG = "TextColorAttr"
+        const val TAG = "TextSizeAttr"
     }
 
     override fun apply(view: View?) {
@@ -20,7 +21,8 @@ class TextColorAttr : SkinElementAttr() {
 //        Log.d(TAG, "applyView:$view, this: $this")
 
         (view as? TextView)?.run {
-            setTextColor(SkinManager.resources.getColorStateList(attrValueRefId))
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, SkinManager.resources.getDimension(attrValueRefId))
+//            setTextColor(SkinManager.resources.getColorStateList(attrValueRefId))
         }
     }
 }

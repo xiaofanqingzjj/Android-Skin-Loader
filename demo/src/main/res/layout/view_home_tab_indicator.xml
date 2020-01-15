@@ -20,5 +20,5 @@
         android:layout_marginTop="2dp"
         android:text="text"
         android:textColor="@color/home_tab_text_color"
-        android:textSize="11dp" />
+        android:textSize="@dimen/tab_bar_text_size" />
 </LinearLayout>

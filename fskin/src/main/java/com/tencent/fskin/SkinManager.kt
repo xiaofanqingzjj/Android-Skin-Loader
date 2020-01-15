@@ -10,12 +10,15 @@ import android.util.Log
 import android.view.View
 import com.tencent.fskin.util.PreferencesUtils
 import com.tencent.fskin.util.async
+import com.tencent.fskin.util.runUIThread
 import java.io.File
+import java.lang.RuntimeException
 
 
 /**
  * 皮肤管理器
  *
+ * @author fortunexiao
  */
 object SkinManager {
 
@@ -35,7 +38,25 @@ object SkinManager {
 
     internal var skinPackageName: String? = null
 
+    /**
+     *
+     */
     private val mSkins: MutableMap<Activity, ActivitySkinChange> = mutableMapOf()
+
+    /**
+     * 防止快速切换
+     */
+    private var isApplying = false
+
+    private var currentSkinPath: String? = null
+
+    /**
+     * 当前皮肤组件是否进行了初始化
+     */
+    private val isInit: Boolean
+        get() {
+            return this::mApplication.isInitialized
+        }
 
     /**
      * 初始化皮肤管理
@@ -49,13 +70,26 @@ object SkinManager {
         // 把activity中所有的View收集起来
         addActivityCallback()
 
+        // 如果用户设置了皮肤，则应用用户设置的皮肤
+        applySkin()
+    }
+
+    private fun applySkin() {
         // 如果设置了皮肤，加载设置的皮肤
         async {
             val skinPath = currentSkinPath()
+            Log.d(TAG, "applyInitSkin:$skinPath")
             if (!skinPath.isNullOrEmpty()) {
                 applySkin(skinPath)
             }
         }
+    }
+
+    /**
+     * 扩展自己的皮肤属性
+     */
+    fun registerSkinAttr(attrName: String, attr: Class<out SkinElementAttr>) {
+        SkinElementAttrFactory.registerSkinAttr(attrName, attr)
     }
 
 
@@ -85,13 +119,9 @@ object SkinManager {
 
         attrs?.add(skinElementAttr)
 
-
         // 初始加进来的时候需要重新设置一下
-        skinElementAttr.applyInner(view)
-
+        skinElementAttr.initApply(view)
     }
-
-
 
 
     /**
@@ -162,13 +192,11 @@ object SkinManager {
         val context = mApplication
 
         val file = File(skinPkgPath)
-
         if (!file.exists()) {
             return Pair(null, "Skin file is not exist")
         }
 
         val pm = context.packageManager
-
         return try {
             val skinPackageInfo = pm.getPackageArchiveInfo(skinPkgPath, PackageManager.GET_ACTIVITIES)
 
@@ -183,59 +211,110 @@ object SkinManager {
 
             Pair(skinResource, null)
         } catch (e: java.lang.Exception) {
+
+            // 皮肤包加载失败
             Pair(null, e.message)
         }
     }
 
 
+
+
     /**
-     * 应用皮肤
+     * 当前的皮肤是否是默认皮肤
      */
-    fun applySkin(skinPkgPath: String, changeCallback: ILoaderListener? = null) {
-
-        Log.d(TAG, "applySkin:$skinPkgPath")
-
-        async (
-                preExecute = {
-                    changeCallback?.onStart()
-                },
-                doBackground = {
-                    loadSkin(skinPkgPath)
-                },
-                postExecute =  {
-                    val result = it!!
-
-                    Log.d(TAG, "applySkinComplete:$skinPkgPath, result:$it")
-
-                    if (result.first != null) { // 皮肤切换成功
-
-                        // 保存皮肤路径
-                        saveCurrentSkin(skinPkgPath)
-
-                        // 加载皮肤包的Resource对象
-                        mSkinResources = result.first
-
-                        // 通知已经创建了界面换肤
-                        notifySkinChange()
-
-                        // 皮肤切换成功回调
-                        changeCallback?.onSuccess()
-                    } else { // 皮肤切换失败
-                        changeCallback?.onFailed(result.second)
-                    }
-                })
+    internal fun isDefaultSkin(): Boolean {
+        return mSkinResources == null
     }
 
+    /**
+     * 应用皮肤
+     *
+     * @param skinPkgPath 外部皮肤包的路径，如果为null表示恢复成默认皮肤
+     * @param changeCallback 回调
+     */
+    fun applySkin(skinPkgPath: String?, changeCallback: ILoaderListener? = null) {
+
+        // 未初始化皮肤组件
+        if (!isInit) {
+            throw RuntimeException("You should init SkinManager by call init() method.")
+        }
+
+        // 防止快速切换
+        if (isApplying) return
+
+        Log.d(TAG, "applySkin:$skinPkgPath, current:$currentSkinPath")
+
+        // 防止无效切换
+        if ((isDefaultSkin() && skinPkgPath.isNullOrEmpty()) || skinPkgPath == currentSkinPath) {
+            return
+        }
+
+        isApplying = true
+        if (skinPkgPath.isNullOrEmpty()) {
+
+            changeCallback?.onStart()
+
+            restoreDefaultTheme()
+            runUIThread {
+                changeCallback?.onSuccess()
+                isApplying = false
+            }
+        } else {
+            Log.d(TAG, "applySkin:$skinPkgPath")
+            async(
+                    preExecute = {
+                        changeCallback?.onStart()
+                    },
+                    doBackground = {
+                        loadSkin(skinPkgPath)
+                    },
+                    postExecute = {
+                        val result = it!!
+
+                        Log.d(TAG, "applySkinComplete:$skinPkgPath, result:$it")
+                        if (result.first != null) { // 皮肤切换成功
+                            // 保存皮肤路径
+                            saveCurrentSkin(skinPkgPath)
+
+                            // 加载皮肤包的Resource对象
+                            mSkinResources = result.first
+
+                            // 通知已经创建了界面换肤
+                            notifySkinChange()
+
+                            // 皮肤切换成功回调
+                            changeCallback?.onSuccess()
+                        } else { // 皮肤切换失败
+                            changeCallback?.onFailed(result.second)
+                        }
+
+                        isApplying = false
+                    })
+        }
+    }
+
+    fun restoreDefaultTheme() {
+
+        if (mSkinResources == null) return
+        
+        mSkinResources = null
+        saveCurrentSkin("")
+        notifySkinChange()
+    }
+
+
     private fun saveCurrentSkin(skinPkgPath: String) {
-        val context = mApplication ?: return
+        currentSkinPath = skinPkgPath
+        val context = mApplication
         PreferencesUtils.putString(context, "skinPath", skinPkgPath)
     }
 
     /**
      * 当前应用的皮肤包
      */
-    private fun currentSkinPath(): String? {
-        val context = mApplication ?: return null
+    fun currentSkinPath(): String? {
+        val context = mApplication
         return PreferencesUtils.getString(context, "skinPath")
     }
 
@@ -245,12 +324,6 @@ object SkinManager {
         }
     }
 
-
-    fun restoreDefaultTheme() {
-        mSkinResources = null
-        PreferencesUtils.putString(mApplication, "skinPath", "")
-        notifySkinChange()
-    }
 
 
     interface ILoaderListener {

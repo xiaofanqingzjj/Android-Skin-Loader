@@ -36,7 +36,7 @@ class SkinInflaterFactory : LayoutInflater.Factory {
         val view = createView(context, name, attrs) ?: return null
 
         mSkinItems[view] = SkinElement(view, skinAttrs).apply {
-            apply()
+            initApply()
         }
 
         return view

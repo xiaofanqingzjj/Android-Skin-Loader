@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Used for set whether the view should be skin enable-->
-    <attr name="enable" format="boolean"/>
+
+
+    <attr name="enableSkin" format="boolean" />
+
 </resources>

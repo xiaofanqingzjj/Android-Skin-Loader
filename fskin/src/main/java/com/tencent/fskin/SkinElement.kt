@@ -21,12 +21,19 @@ data class SkinElement(
         var attrs: ArrayList<SkinElementAttr> = ArrayList()) {
 
 
+
+    internal fun initApply() {
+        if (!SkinManager.isDefaultSkin()) {
+            apply()
+        }
+    }
+
     /**
      * 通知皮肤修改了
      */
     fun apply() {
         attrs.forEach {
-            it.applyInner(view)
+            it.apply(view)
         }
     }
 

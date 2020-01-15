@@ -2,6 +2,7 @@ package com.tencent.fskin.demo
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.tencent.fskin.SkinManager
 import com.tencent.fskin.demo.base.BaseActivity
 import com.tencent.fskin.demo.base.MenuFragment
@@ -31,9 +32,11 @@ class ChangeSkinActivity : BaseActivity() {
                     }
 
                     override fun onSuccess() {
+                        Toast.makeText(context, "皮肤切换成功", Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onFailed(reason: String?) {
+                        Toast.makeText(context, "皮肤切换失败$reason", Toast.LENGTH_SHORT).show()
                     }
 
                 })

@@ -45,5 +45,9 @@
 
     <dimen name="action_bar_title_size">16dp</dimen>
 
+    <dimen name="tab_bar_text_size">10dp</dimen>
+
+    <dimen name="list_padding">20dp</dimen>
+
 
 </resources>

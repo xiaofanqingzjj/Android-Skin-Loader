@@ -17,6 +17,7 @@ class ImageSrcAttr : SkinElementAttr() {
     }
 
     override fun apply(view: View?) {
+        super.apply(view)
         Log.d(TAG, "applyView:$view, this: $this")
 
         (view as? ImageView)?.run {

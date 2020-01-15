@@ -11,10 +11,11 @@ import com.tencent.fskin.SkinElementAttr
 class BackgroundAttr : SkinElementAttr() {
 
     override fun apply(view: View?) {
+        super.apply(view)
         view?.run {
             when (attrValueTypeName) {
-                RES_TYPE_NAME_COLOR -> setBackgroundColor(SkinManager.resources.getColor(attrValueRefId))
-                RES_TYPE_NAME_DRAWABLE -> background = (SkinManager.resources.getDrawable(attrValueRefId))
+                "color" -> setBackgroundColor(SkinManager.resources.getColor(attrValueRefId))
+                "drawable" -> background = (SkinManager.resources.getDrawable(attrValueRefId))
             }
         }
     }

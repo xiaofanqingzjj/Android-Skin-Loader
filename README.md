@@ -1,22 +1,14 @@
-# Android-Skin-Loader 
+# FSkin 
 
 
 
-> 一个通过动态加载本地皮肤包进行换肤的皮肤框架
+> 一个通过动态加载外部皮肤包的组件
 
-## 介绍
+## 项目介绍
 
 没有任何侵入性，接入只需一行代码
 
 
-## 工程目录介绍
-```
-Android-Skin-Loader
-├── android-skin-loader-lib      // 皮肤加载库
-├── android-skin-loader-sample   // 皮肤库应用实例
-├── android-skin-loader-skin     // 皮肤包生成demo
-└── skin-package                 // 皮肤包输出目录
-```
 
 
 ## 演示
@@ -32,16 +24,17 @@ Android-Skin-Loader
 ## 用法
 
 #### 1. 在`Application`中进行初始化
+
 ```java
+
 public class YourApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
-		// Must call init first 
 		SkinManager.getInstance().init(this);
-		
 	}
 }
 ```
+
 
 #### 2. 在布局文件中标识需要换肤的View
 
