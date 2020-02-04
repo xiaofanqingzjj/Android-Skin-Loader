@@ -128,7 +128,7 @@ class ImageSrcAttr : SkinElementAttr() {
 
 ## 换肤效果
 
-![](./sceenshot/screem.gif)
+![换肤效果](./screenshot/screem.gif)
 
 
 
