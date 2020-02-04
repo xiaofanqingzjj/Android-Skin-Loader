@@ -7,6 +7,12 @@
 一个使用简单、无侵入性的换肤组件
 
 
+## 换肤效果
+
+![换肤效果](./screenshot/screem.gif)
+
+
+
 ## 用法
 
 
@@ -124,11 +130,6 @@ class ImageSrcAttr : SkinElementAttr() {
     // 注册ImageView的src换肤属性
     SkinManager.registerSkinAttr("src", ImageSrcAttr::class.java)
 ```
-
-
-## 换肤效果
-
-![换肤效果](./screenshot/screem.gif)
 
 
 
