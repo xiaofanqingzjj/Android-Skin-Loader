@@ -1,133 +1,135 @@
 # FSkin 
 
-
-
-> 一个通过动态加载外部皮肤包的组件
+> 一个通过动态加载外部皮肤包的开源组件
 
 ## 项目介绍
 
-没有任何侵入性，接入只需一行代码
-
-
-
-
-## 演示
-#### 1. 下载[demo](https://github.com/fengjundev/Android-Skin-Loader/tree/master/skin-package), 将`BlackFantacy.skin`放在SD卡根目录
-#### 2. 效果图
-- 换肤前
-![sample](./screenshot/demo1.gif)
-
-- 换肤后
-![sample](./screenshot/demo2.gif)
+一个使用简单、无侵入性的换肤组件
 
 
 ## 用法
 
-#### 1. 在`Application`中进行初始化
 
-```java
+#### 1. 在`Application`中进行初始化皮肤组件
 
-public class YourApplication extends Application {
-	public void onCreate() {
-		super.onCreate();
-		SkinManager.getInstance().init(this);
-	}
+```kotlin
+class YourApplication : Application {
+    fun onCreate() {
+        super.onCreate()
+        SkinManager.getInstance().init(this)
+    }
 }
 ```
 
 
-#### 2. 在布局文件中标识需要换肤的View
+#### 2. 创建一个独立的module作为皮肤包
 
-```xml
-...
-xmlns:skin="http://schemas.android.com/android/skin"
-...
-  <TextView
-     ...
-     skin:enable="true" 
-     ... />
+在皮肤包的module里放置要换肤的同名资源。把编译好的apk包放在sd卡下的特定目录下。
+
+
+#### 3. 加载特定的皮肤
+
+在你需要切换皮肤的地方，调用applySkin方法切换到对应的皮肤包
+
+```kotlin
+     SkinManager.applySkin("<Your skin apk path>", object : SkinManager.ILoaderListener {
+                    override fun onStart() {
+                    }
+
+                    override fun onSuccess() {
+                        Toast.makeText(context, "皮肤切换成功", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onFailed(reason: String?) {
+                        Toast.makeText(context, "皮肤切换失败$reason", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+
 ```
 
-#### 3. 继承`BaseActivity`或者`BaseFragmentActivity`作为BaseActivity进行开发
-  
-  
-#### 4. 从`.skin`文件中设置皮肤
-```java
-String SKIN_NAME = "BlackFantacy.skin";
-String SKIN_DIR = Environment.getExternalStorageDirectory() + File.separator + SKIN_NAME;
-File skin = new File(SKIN_DIR);
-SkinManager.getInstance().load(skin.getAbsolutePath(),
-				new ILoaderListener() {
-					@Override
-					public void onStart() {
-					}
+皮肤组件会自动检测所有的xml布局文件中所有支持的换肤的属性，如果属性值是使用的引用资源且皮肤包里也有对应的资源，那么换肤组件会自动切换到皮肤组件里的资源。
 
-					@Override
-					public void onSuccess() {
-					}
+#### 4.动态资源设置的换肤
 
-					@Override
-					public void onFailed() {
-					}
-				});
+相比与xml中的静态资源的引用，实际情况下更多的是使用代码动态的给界面设置资源，那么这种情况下，该如何使用换肤组件呢：
+
+你只需要调用SkinManager的addSkinAttr方法来把activity、view、属性名以及资源id添加到皮肤组件即可。
+
+``` kotlin
+    // SkinManager.addSkinAttr(<actiview>, <View>, <attr name>, <resourceId>)
+    SkinManager.addSkinAttr(this, view.iv_icon, "src", icon)
 ```
 
-#### 5. 重设默认皮肤
-```java
-SkinManager.getInstance().restoreDefaultTheme();
-```
+#### 5.可扩张的换肤属性
 
-#### 6. 对代码中创建的View的换肤支持
-主要由`IDynamicNewView`接口实现该功能，在`BaseActivity`，`BaseFragmentActivity`和`BaseFragment`中已经实现该接口.
+##### 目前换肤组件支持的换肤属性有：
 
-```java
-public interface IDynamicNewView {
-	void dynamicAddView(View view, List<DynamicAttr> pDAttrs);
+* background
+
+View的background属性
+
+* src
+
+ImageView的src属性
+
+* textColor
+
+TextView的TextColor属性
+
+* textSize
+
+TextView的TextSize属性
+
+* drawableLeft、drawableTop、drawableRight、drawableBottom
+
+TextView的drawableXXX相关的属性
+
+* padding、paddingLeft、paddingTop、paddingRight、paddingBottom
+
+View的padding相关属性
+
+* margin、marginLeft、marginTop、marginRight、marginBottom
+
+View LayoutMargin相关的属性
+
+
+##### 扩展属性
+
+对于目前支持的换肤属性来说可以满足大多数的换肤场景，对于不满足的场景，换肤组件提供了扩展换肤属性的功能。
+
+你只需要扩展SkinElementAttr类，实现apply方法即刻，该方法会在皮肤切换的时候调用，在该方法里调用SkinManager的skinResourceProxy的资源加载方法来加载资源即可。
+
+下面是一个自定义换肤属性的例子：
+
+``` kotlin
+/**
+ * ImageView android:src
+ */
+class ImageSrcAttr : SkinElementAttr() {
+    override fun apply(view: View?) {
+        super.apply(view)
+        (view as? ImageView)?.run {
+        
+            // 当皮肤变化的时候更新View的src属性
+            setImageDrawable(SkinManager.skinResourcesProxy.getDrawable(attrValueRefId))
+        }
+    }
 }
 ```
-**用法：**动态创建View后，调用`dynamicAddView`方法注册该View至皮肤映射表即可(如下).详见sample工程
 
-```java
-	private void dynamicAddTitleView() {
-		TextView textView = new TextView(getActivity());
-		textView.setText("Small Article (动态new的View)");
-		RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		param.addRule(RelativeLayout.CENTER_IN_PARENT);
-		textView.setLayoutParams(param);
-		textView.setTextColor(getActivity().getResources().getColor(R.color.color_title_bar_text));
-		textView.setTextSize(20);
-		titleBarLayout.addView(textView);
-		
-		List<DynamicAttr> mDynamicAttr = new ArrayList<DynamicAttr>();
-		mDynamicAttr.add(new DynamicAttr(AttrFactory.TEXT_COLOR, R.color.color_title_bar_text));
-		dynamicAddView(textView, mDynamicAttr);
-	}
+定义好扩展的Attr之后通过SkinManager的registerSkinAttr方法来注册支持的属性：
+
+```kotlin
+    // 注册ImageView的src换肤属性
+    SkinManager.registerSkinAttr("src", ImageSrcAttr::class.java)
 ```
 
 
+## 换肤效果
 
-#### 7. 皮肤包是什么？如何生成？
-- 皮肤包（后缀名为`.skin`）的本质是一个apk文件，该apk文件不包含代码，只包含资源文件
-- 在皮肤包工程中（示例工程为`skin/BlackFantacy`）添加需要换肤的同名的资源文件，直接编译生成apk文件，再更改后缀名为`.skin`j即可（防止用户点击安装）
-- 使用gradle的同学，build`android-skin-loader-skin`工程后即可在`skin-package`目录下取皮肤包（修改脚本中`def skinName = "BlackFantacy.skin"`换成自己想要的皮肤名）
+![](./sceenshot/screem.gif)
 
 
----
 
-
-## License
-
-    Copyright [2015] [FENGJUN]
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
 
